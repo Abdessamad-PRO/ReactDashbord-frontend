@@ -1,0 +1,209 @@
+import { useState } from 'react';
+import ProjectForm from './ProjectForm';
+
+const ProjectsList = ({ projects, onEdit, onDelete, onAssignTask, allTasks = [] }) => {
+  const [expandedProject, setExpandedProject] = useState(null);
+  const [showProjectForm, setShowProjectForm] = useState(false);
+  const [editingProject, setEditingProject] = useState(null);
+
+  const toggleProjectExpand = (projectId) => {
+    if (expandedProject === projectId) {
+      setExpandedProject(null);
+    } else {
+      setExpandedProject(projectId);
+    }
+  };
+
+  const getStatusClass = (status) => {
+    switch (status.toLowerCase()) {
+      case 'en cours': return 'status-in-progress';
+      case 'terminé': return 'status-completed';
+      case 'en attente': return 'status-pending';
+      default: return '';
+    }
+  };
+
+  // Gestion du formulaire de projet
+  const handleOpenProjectForm = (project = null) => {
+    setEditingProject(project);
+    setShowProjectForm(true);
+  };
+
+  const handleCloseProjectForm = () => {
+    setShowProjectForm(false);
+    setEditingProject(null);
+  };
+
+  const handleProjectSubmit = (projectData) => {
+    if (editingProject) {
+      onEdit(projectData);
+    } else {
+      // Pour un nouveau projet, on ajoute à la liste des projets
+      const newProjects = [...projects, projectData];
+      onEdit(projectData); // ou utilisez une fonction spécifique comme onAddProject si disponible
+    }
+  };
+
+  return (
+    <div className="projects-list-container">
+      <div className="projects-header">
+        <h2>Gestion des Projets</h2>
+        <button className="create-project-btn" onClick={() => handleOpenProjectForm()}>
+          <span className="create-icon">+</span> Nouveau Projet
+        </button>
+      </div>
+
+      <div className="projects-filters">
+        <div className="filter-group">
+          <span className="filter-label">Statut:</span>
+          <select className="filter-select">
+            <option value="all">Tous</option>
+            <option value="in-progress">En cours</option>
+            <option value="completed">Terminé</option>
+            <option value="pending">En attente</option>
+          </select>
+        </div>
+        <div className="filter-group">
+          <span className="filter-label">Trier par:</span>
+          <select className="filter-select">
+            <option value="date-desc">Date (récent)</option>
+            <option value="date-asc">Date (ancien)</option>
+            <option value="priority">Priorité</option>
+          </select>
+        </div>
+        <div className="filter-search">
+          <input type="text" className="filter-input" placeholder="Rechercher un projet..." />
+        </div>
+      </div>
+
+      <div className="projects-table">
+        <div className="table-header">
+          <div className="header-cell">Projet</div>
+          <div className="header-cell">Statut</div>
+          <div className="header-cell">Progression</div>
+          <div className="header-cell">Deadline</div>
+          <div className="header-cell">Responsable</div>
+          <div className="header-cell">Actions</div>
+        </div>
+        
+        {projects.length === 0 && (
+          <div className="empty-state">
+            <div className="empty-state-icon">📁</div>
+            <h3 className="empty-state-title">Aucun projet trouvé</h3>
+            <p className="empty-state-description">Créez votre premier projet pour commencer à gérer vos tâches.</p>
+            <button className="create-project-btn" onClick={() => handleOpenProjectForm()}>
+              <span className="create-icon">+</span> Nouveau Projet
+            </button>
+          </div>
+        )}
+
+        {projects.map(project => (
+          <div key={project.id} className="project-row">
+            <div className={`project-main ${expandedProject === project.id ? 'active' : ''}`} onClick={() => toggleProjectExpand(project.id)}>
+              <div className="cell project-name" data-label="Projet">
+                <span className={`expand-icon ${expandedProject === project.id ? 'expanded' : ''}`}>
+                  ▶
+                </span>
+                {project.name}
+              </div>
+              <div className="cell project-status" data-label="Statut">
+                <span className={`status-badge ${getStatusClass(project.status)}`}>
+                  {project.status}
+                </span>
+              </div>
+              <div className="cell project-progress" data-label="Progression">
+                <div className="progress-bar">
+                  <div 
+                    className="progress-fill" 
+                    style={{ width: `${project.progress}%` }}
+                  ></div>
+                </div>
+                <span className="progress-text">{project.progress}%</span>
+              </div>
+              <div className="cell project-deadline" data-label="Deadline">{project.deadline}</div>
+              <div className="cell project-assignee" data-label="Responsable">
+                {project.assignee}
+              </div>
+              <div className="cell project-actions">
+                <button 
+                  className="action-btn edit-btn" 
+                  onClick={(e) => { e.stopPropagation(); handleOpenProjectForm(project); }}
+                  title="Modifier"
+                >
+                  Modifier
+                </button>
+                <button 
+                  className="action-btn delete-btn" 
+                  onClick={(e) => { e.stopPropagation(); onDelete(project.id); }}
+                  title="Supprimer"
+                >
+                  Supprimer
+                </button>
+              </div>
+            </div>
+
+            {expandedProject === project.id && (
+              <div className="project-details">
+                <div className="details-section">
+                  <h4>Description</h4>
+                  <p className="project-description">{project.description || 'Aucune description disponible.'}</p>
+                </div>
+                
+                <div className="details-section">
+                  <div className="tasks-header">
+                    <h4>Tâches ({project.tasks ? project.tasks.length : 0})</h4>
+                    <button 
+                      className="add-task-btn" 
+                      onClick={(e) => { e.stopPropagation(); onAssignTask(project.id); }}
+                    >
+                      + Ajouter une tâche
+                    </button>
+                  </div>
+                  
+                  <div className="tasks-list">
+                    {project.tasks && project.tasks.length > 0 ? (
+                      project.tasks.map(task => (
+                        <div key={task.id} className="task-item">
+                          <div className="task-info">
+                            <h5>{task.title}</h5>
+                            <span className={`task-status ${getStatusClass(task.status)}`}>
+                              {task.status}
+                            </span>
+                            <span className="task-deadline">Échéance: {task.deadline}</span>
+                          </div>
+                          <div className="task-assigned">
+                            <span>Assignée à: {task.assignedTo}</span>
+                          </div>
+                          <div className="task-actions">
+                            <button className="task-btn">Modifier</button>
+                            <button className="task-btn">Supprimer</button>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="empty-task-message">
+                        <p>Aucune tâche associée à ce projet. Ajoutez une tâche pour commencer à suivre votre progression.</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Formulaire de projet */}
+      {showProjectForm && (
+        <ProjectForm
+          onClose={handleCloseProjectForm}
+          onSubmit={handleProjectSubmit}
+          editProject={editingProject}
+          tasksList={allTasks}
+        />
+      )}
+    </div>
+  );
+};
+
+export default ProjectsList;

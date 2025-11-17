@@ -1,0 +1,218 @@
+/* TaskForm.css */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Playfair+Display:wght@400;500&display=swap');
+/* Style de base pour le fond modale */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* background-color: rgba(0, 0, 0, 0.5); */
+  background-color: transparent !important; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Style du formulaire avec fond blanc et effet de profondeur */
+.task-form-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%; 
+  transform: translate(-50%, -50%); 
+  width: 90%;
+  max-width: 700px; 
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  padding: 30px;
+  /* color: #333; */
+  cursor: move;
+  touch-action: none;
+  user-select: none;
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  background-color: var(--card-bg) !important;
+}
+
+.task-form-modal:hover {
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Header avec bordure subtile */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #2c3e50;
+  font-family: 'Playfair Display', serif;
+}
+
+/* Bouton de fermeture élégant */
+.close-btn {
+  background: none;
+  border: none;
+  color: #7f8c8d;
+  font-size: 28px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+  color: #e74c3c;
+  transform: rotate(90deg);
+}
+
+/* Style du formulaire */
+.task-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: #2c3e50;
+  font-size: 14px;
+}
+
+/* Inputs élégants */
+input[type="text"],
+input[type="date"],
+textarea,
+select {
+  background: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 12px 15px;
+  color: #333;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+  background: white;
+}
+
+.readonly-input {
+  background: #f0f0f0;
+  cursor: not-allowed;
+}
+
+/* Style pour les boutons */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.cancel-btn,
+.submit-btn {
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  font-size: 15px;
+}
+
+.cancel-btn {
+  background: #f5f5f5;
+  color: #7f8c8d;
+}
+
+.cancel-btn:hover {
+  background: #e0e0e0;
+}
+
+.submit-btn {
+  background: #3498db;
+  color: white;
+  box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+}
+
+.submit-btn:hover {
+  background: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+}
+
+.submit-btn:disabled {
+  background: #bdc3c7;
+  transform: none;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* Style pour les lignes de formulaire */
+.form-row {
+  display: flex;
+  gap: 15px;
+}
+
+.half {
+  flex: 1;
+}
+
+/* Style pour les selects */
+.form-select {
+  appearance: none;
+  /* background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); */
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 35px;
+}
+
+/* Animation subtile */
+@keyframes subtleFloat {
+  0% { transform: translate(-50%, -50%) translateY(0px); }
+  50% { transform: translate(-50%, -50%) translateY(-5px); }
+  100% { transform: translate(-50%, -50%) translateY(0px); }
+}
+
+.task-form-modal {
+  animation: subtleFloat 8s ease-in-out infinite;
+}
+
+/* Style pour le texte du placeholder */
+::placeholder {
+  color: #95a5a6;
+  opacity: 1;
+}
+
+/* Style pour le textarea */
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}

@@ -1,0 +1,310 @@
+import { useState, useEffect } from 'react';
+import TaskForm from './TaskForm';
+
+const TasksManager = ({ tasks, onEdit, onDelete, onStatusChange, userRole, projectsList = [] }) => {
+  const [filterStatus, setFilterStatus] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortBy, setSortBy] = useState('date-desc');
+  const [showTaskForm, setShowTaskForm] = useState(false);
+  const [editingTask, setEditingTask] = useState(null);
+  const [columns, setColumns] = useState({
+    'En attente': [],
+    'En cours': [],
+    'Terminé': []
+  });
+
+  const filteredTasks = tasks.filter(task => {
+    // Filtre par statut
+    if (filterStatus !== 'all' && task.status.toLowerCase().replace(' ', '-') !== filterStatus) {
+      return false;
+    }
+    
+    // Filtre par recherche
+    if (searchQuery && !task.title.toLowerCase().includes(searchQuery.toLowerCase())) {
+      return false;
+    }
+    
+    return true;
+  });
+  
+  // Tri et répartition des tâches dans les colonnes
+  useEffect(() => {
+    // Tri des tâches
+    const sortedTasks = [...filteredTasks].sort((a, b) => {
+      if (sortBy === 'date-desc') {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      } else if (sortBy === 'date-asc') {
+        return new Date(a.createdAt) - new Date(b.createdAt);
+      } else if (sortBy === 'deadline') {
+        return new Date(a.deadline) - new Date(b.deadline);
+      } else if (sortBy === 'priority') {
+        const priorityOrder = { 'Haute': 1, 'Moyenne': 2, 'Basse': 3 };
+        return priorityOrder[a.priority] - priorityOrder[b.priority];
+      }
+      return 0;
+    });
+    
+    // Répartition des tâches par statut
+    const newColumns = {
+      'En attente': sortedTasks.filter(task => task.status === 'En attente'),
+      'En cours': sortedTasks.filter(task => task.status === 'En cours'),
+      'Terminé': sortedTasks.filter(task => task.status === 'Terminé')
+    };
+    
+    setColumns(newColumns);
+  }, [filteredTasks, sortBy]);
+
+  // Gestion du drag & drop
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = (e, targetStatus) => {
+    e.preventDefault();
+    const taskId = e.dataTransfer.getData('text/plain');
+    if (taskId) {
+      onStatusChange(taskId, targetStatus);
+    }
+  };
+
+  // Gestion du formulaire de tâche
+  const handleOpenTaskForm = (task = null) => {
+    setEditingTask(task);
+    setShowTaskForm(true);
+  };
+
+  const handleCloseTaskForm = () => {
+    setShowTaskForm(false);
+    setEditingTask(null);
+  };
+
+  const handleTaskSubmit = (taskData) => {
+    if (editingTask) {
+      onEdit(taskData);
+    } else {
+      // Pour une nouvelle tâche, on ajoute à la liste des tâches
+      const newTasks = [...tasks, taskData];
+      onEdit(taskData); // ou utilisez une fonction spécifique comme onAddTask si disponible
+    }
+  };
+
+  return (
+    <div className="tasks-manager-container">
+      <div className="tasks-header">
+        <h2>Gestion des Tâches</h2>
+        {/* Le bouton n'est affiché que pour les managers et admins */}
+        {userRole && (userRole === 'manager' || userRole === 'admin') && (
+          <button className="create-button" onClick={() => handleOpenTaskForm()}>
+            <span className="create-icon">+</span> Nouvelle Tâche
+          </button>
+        )}
+      </div>
+
+      <div className="tasks-filters">
+        <div className="filter-item">
+          <label>Statut:</label>
+          <select 
+            value={filterStatus} 
+            onChange={(e) => setFilterStatus(e.target.value)}
+            className="filter-select"
+          >
+            <option value="all">Tous</option>
+            <option value="en-cours">En cours</option>
+            <option value="terminé">Terminé</option>
+            <option value="en-attente">En attente</option>
+          </select>
+        </div>
+        <div className="filter-item">
+          <label>Trier par:</label>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="filter-select"
+          >
+            <option value="date-desc">Date (récent)</option>
+            <option value="date-asc">Date (ancien)</option>
+            <option value="deadline">Échéance</option>
+            <option value="priority">Priorité</option>
+          </select>
+        </div>
+        <div className="filter-search">
+          <input 
+            type="text" 
+            placeholder="Rechercher une tâche..." 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-input"
+          />
+        </div>
+      </div>
+      
+      <div className="kanban-view">
+        {/* Colonne À faire */}
+        <div 
+          className="kanban-column" 
+          onDragOver={handleDragOver}
+          onDrop={(e) => handleDrop(e, 'En attente')}
+        >
+          <div className="column-header pending">
+            <h3>À faire</h3>
+            <span className="task-count">{columns['En attente'].length}</span>
+          </div>
+          <div className="column-tasks">
+            {columns['En attente'].map(task => (
+              <TaskCard 
+                key={task.id} 
+                task={task} 
+                onEdit={handleOpenTaskForm}
+                onDelete={onDelete}
+                onStatusChange={onStatusChange}
+              />
+            ))}
+            {columns['En attente'].length === 0 && (
+              <div className="empty-column-message">Aucune tâche en attente</div>
+            )}
+          </div>
+        </div>
+        
+        {/* Colonne En cours */}
+        <div 
+          className="kanban-column" 
+          onDragOver={handleDragOver}
+          onDrop={(e) => handleDrop(e, 'En cours')}
+        >
+          <div className="column-header in-progress">
+            <h3>En cours</h3>
+            <span className="task-count">{columns['En cours'].length}</span>
+          </div>
+          <div className="column-tasks">
+            {columns['En cours'].map(task => (
+              <TaskCard 
+                key={task.id} 
+                task={task} 
+                onEdit={handleOpenTaskForm}
+                onDelete={onDelete}
+                onStatusChange={onStatusChange}
+              />
+            ))}
+            {columns['En cours'].length === 0 && (
+              <div className="empty-column-message">Aucune tâche en cours</div>
+            )}
+          </div>
+        </div>
+        
+        {/* Colonne Terminé */}
+        <div 
+          className="kanban-column" 
+          onDragOver={handleDragOver}
+          onDrop={(e) => handleDrop(e, 'Terminé')}
+        >
+          <div className="column-header completed">
+            <h3>Terminé</h3>
+            <span className="task-count">{columns['Terminé'].length}</span>
+          </div>
+          <div className="column-tasks">
+            {columns['Terminé'].map(task => (
+              <TaskCard 
+                key={task.id} 
+                task={task} 
+                onEdit={handleOpenTaskForm}
+                onDelete={onDelete}
+                onStatusChange={onStatusChange}
+              />
+            ))}
+            {columns['Terminé'].length === 0 && (
+              <div className="empty-column-message">Aucune tâche terminée</div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Formulaire de tâche */}
+      {showTaskForm && (
+        <TaskForm
+          onClose={handleCloseTaskForm}
+          onSubmit={handleTaskSubmit}
+          editTask={editingTask}
+          projectsList={projectsList}
+        />
+      )}
+    </div>
+  );
+};
+
+// Composant de carte de tâche
+const TaskCard = ({ task, onEdit, onDelete, onStatusChange }) => {
+  const getPriorityClass = (priority) => {
+    switch (priority) {
+      case 'Haute': return 'priority-high';
+      case 'Moyenne': return 'priority-medium';
+      case 'Basse': return 'priority-low';
+      default: return '';
+    }
+  };
+
+  const handleDragStart = (e) => {
+    e.dataTransfer.setData('text/plain', task.id);
+  };
+
+  return (
+    <div 
+      className="task-card" 
+      draggable="true" 
+      onDragStart={handleDragStart}
+    >
+      <div className="task-card-header">
+        <span className={`priority-indicator ${getPriorityClass(task.priority)}`}></span>
+        <h4>{task.title}</h4>
+        <div className="task-actions">
+          <button 
+            className="task-action-btn edit" 
+            onClick={() => onEdit(task)}
+          >
+            ✏️
+          </button>
+          <button 
+            className="task-action-btn delete" 
+            onClick={() => onDelete(task.id)}
+          >
+            🗑️
+          </button>
+        </div>
+      </div>
+      
+      <div className="task-card-content">
+        <p className="task-description">{task.description}</p>
+        <div className="task-meta">
+          <div className="deadline">
+            <span className="meta-label">Échéance:</span>
+            <span className="meta-value">{task.deadline}</span>
+          </div>
+          <div className="assigned-to">
+            <span className="meta-label">Assignée à:</span>
+            <span className="meta-value">{task.assignedTo}</span>
+          </div>
+        </div>
+        
+        <div className="task-card-footer">
+          <select 
+            value={task.status} 
+            onChange={(e) => onStatusChange(task.id, e.target.value)}
+            className="status-selector"
+          >
+            <option value="En attente">À faire</option>
+            <option value="En cours">En cours</option>
+            <option value="Terminé">Terminé</option>
+          </select>
+          
+          {task.project && (
+            <div className="task-project">
+              <span className="project-badge">{task.project}</span>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default TasksManager;

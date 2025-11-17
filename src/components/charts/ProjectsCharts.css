@@ -1,0 +1,146 @@
+.charts-container {
+  margin-bottom: 1.75rem;
+  width: 100%;
+}
+
+.charts-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+
+.chart-card {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  min-height: 365px;
+}
+
+.chart-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.chart-card h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  color: var(--text-primary);
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.chart-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 280px;
+  overflow: visible;
+  margin-top: 0.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .charts-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .chart-card {
+    margin-bottom: 1rem;
+  }
+  
+  .chart-container {
+    min-height: 250px;
+  }
+}
+
+/* Tooltips and legends styling */
+.recharts-tooltip-wrapper {
+  z-index: 10;
+  pointer-events: none;
+}
+
+.recharts-default-tooltip {
+  background-color: var(--card-bg) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  padding: 0.75rem !important;
+  max-width: 250px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.recharts-tooltip-label {
+  color: var(--text-primary) !important;
+  font-weight: 600 !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.recharts-tooltip-item-list {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.recharts-tooltip-item {
+  color: var(--text-secondary) !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0.25rem 0 !important;
+}
+
+.recharts-tooltip-item-name {
+  margin-right: 0.5rem !important;
+}
+
+.recharts-legend-wrapper {
+  font-size: 0.85rem !important;
+}
+
+.recharts-legend-item {
+  margin-right: 1rem !important;
+}
+
+/* Animation pour les graphiques */
+.recharts-surface {
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Styles spécifiques pour améliorer l'apparence des barres */
+.recharts-bar-rectangle {
+  transition: opacity 0.3s;
+}
+
+.recharts-bar-rectangle:hover {
+  opacity: 0.8;
+}
+
+/* Style pour les axes */
+.recharts-cartesian-axis-line {
+  stroke: var(--border-color);
+  stroke-width: 1px;
+}
+
+.recharts-cartesian-axis-tick-line {
+  stroke: var(--border-color);
+  stroke-width: 1px;
+}
+
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: var(--border-color);
+  stroke-opacity: 0.2;
+}

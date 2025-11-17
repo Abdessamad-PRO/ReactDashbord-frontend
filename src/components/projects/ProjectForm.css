@@ -1,0 +1,225 @@
+/* ProjectForm.css */
+
+/* Police élégante */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Playfair+Display:wght@400;500&display=swap');
+
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* background-color: rgba(0, 0, 0, 0.5); */
+  background-color: transparent !important;
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; 
+  
+}
+
+.project-form-modal { 
+  position: absolute;
+  /* background-color: #ffffff;  */
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  width: 90%; 
+  max-width: 700px;
+  /* max-height: 90vh; */
+  overflow-y: auto;
+  font-family: 'Montserrat', sans-serif;
+  cursor: move;
+  border: 1px solid #e0e0e0;
+  background-color: var(--card-bg) !important;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 25px;
+  border-bottom: 1px solid #f0f0f0; 
+  
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-family: 'Playfair Display', serif;
+  font-weight: 500;
+  font-size: 1.8rem;
+  color: #333;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: #666;
+  transition: color 0.2s;
+  padding: 0;
+  line-height: 1;
+  background-color: var(--card-bg) !important;
+}
+
+.close-btn:hover {
+  color: #333;
+}
+
+.project-form {
+  padding: 20px 25px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #444;
+  font-size: 0.95rem;
+}
+
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  transition: border-color 0.3s;
+  /* background-color: #fff;  */
+  background-color: var(--card-bg) !important;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="date"]:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #777;
+  outline: none;
+}
+
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.readonly-input {
+  background-color: #f9f9f9 !important;
+  color: #555;
+  cursor: not-allowed;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.form-row .half {
+  flex: 1;
+}
+
+.error-message {
+  color: #d32f2f;
+  background-color: #fde8e8;
+  padding: 12px 20px;
+  border-radius: 6px;
+  margin: 0 25px 20px;
+  font-size: 0.9rem;
+}
+
+.tasks-list {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #eee;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.task-checkbox {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.task-checkbox input {
+  margin-right: 10px;
+}
+
+.task-checkbox label {
+  margin: 0;
+  font-weight: 400;
+  color: #555;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #f0f0f0;
+  margin-top: 20px;
+}
+
+.cancel-btn,
+.submit-btn {
+  padding: 12px 25px;
+  border-radius: 6px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.cancel-btn {
+  background-color: #f5f5f5;
+  color: #555;
+  border: 1px solid #ddd;
+}
+
+.cancel-btn:hover {
+  background-color: #eaeaea;
+}
+
+.submit-btn {
+  background-color: #4a6fa5;
+  color: white;
+  border: none;
+}
+
+.submit-btn:hover {
+  background-color: #3a5a8f;
+}
+
+.submit-btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Scrollbar personnalisée */
+.tasks-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tasks-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.tasks-list::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.tasks-list::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

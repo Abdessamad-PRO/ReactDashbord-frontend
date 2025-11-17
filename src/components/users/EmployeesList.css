@@ -1,0 +1,28 @@
+/* Animation pour le modal de confirmation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Style pour le modal overlay */
+/* Aucune règle spécifique nécessaire pour l'overlay */
+
+/* Style supplémentaire pour la boîte de dialogue */
+.confirm-dialog {
+  position: relative;
+}
+
+/* Style pour les boutons du modal */
+.confirm-dialog button {
+  transition: all 0.2s ease;
+}
+
+.confirm-dialog button:hover {
+  transform: scale(1.05);
+}

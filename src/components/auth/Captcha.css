@@ -1,0 +1,96 @@
+.captcha-container {
+  margin-bottom: 1.5rem;
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.captcha-wrapper {
+  position: relative;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--background-color);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.captcha-canvas {
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.captcha-canvas:hover {
+  transform: scale(1.02);
+}
+
+.captcha-refresh-btn {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--primary);
+  border: none;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.captcha-refresh-btn:hover {
+  transform: translateY(-50%) rotate(180deg);
+  background: var(--primary-dark);
+}
+
+.captcha-input-container {
+  margin-top: 1rem;
+  position: relative;
+}
+
+.captcha-input-container input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.2s;
+  background: var(--input-bg);
+  color: var(--text-primary);
+}
+
+.captcha-input-container input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+  outline: none;
+}
+
+.captcha-input-container .auth-input-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+}
+
+.captcha-hint {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+  text-align: center;
+  background: var(--background-color);
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+}

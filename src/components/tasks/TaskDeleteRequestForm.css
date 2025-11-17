@@ -1,0 +1,44 @@
+/* Styles pour le formulaire de suppression de tâche */
+.delete-task-icon {
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+  color: var(--danger-color);
+  vertical-align: middle;
+}
+
+.confirmation-icon {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-right: 0.8rem;
+}
+
+.confirmation-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background-color: rgba(var(--primary-color-rgb), 0.1);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.task-delete-button {
+  background-color: transparent;
+  color: var(--danger-color);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.task-delete-button:hover {
+  background-color: rgba(var(--danger-rgb), 0.1);
+}
+
+.task-delete-button svg {
+  margin-right: 0.4rem;
+}
