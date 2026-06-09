@@ -21,7 +21,13 @@ The images used in the landing page carousel are available here:
 - ![Tasks](public/assets/demo-screenshots/taches-page.png)
 - ![Calendar](public/assets/demo-screenshots/calendar-page.png)
 
-## Features
+## Demo Video
+
+
+https://github.com/user-attachments/assets/5e517367-d78e-42e8-ab75-2ea68d0e52db
+
+
+
 
 ### Authentication & Roles
 
